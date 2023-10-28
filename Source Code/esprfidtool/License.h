@@ -181,13 +181,6 @@ Core libraries used:
 */
 
 /*
- ESP8266FtpServer.h - by nailbuster, later modified by bbx10 and apullin
-                   GNU LESSER GENERAL PUBLIC LICENSE
-                       Version 2.1, February 1999
- https://github.com/apullin/esp8266FTPServer/blob/feature/bbx10_speedup/LICENSE
-*/
-
-/*
   WiegandNG.h by JP Liew
   https://github.com/jpliew/Wiegand-NG-Multi-Bit-Wiegand-Library-for-Arduino
   GNU LGPL License 2.1

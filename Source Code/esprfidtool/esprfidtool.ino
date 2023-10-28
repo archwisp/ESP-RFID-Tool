@@ -37,7 +37,6 @@
 #include <ESP8266mDNS.h>
 #include <FS.h>
 #include <ArduinoJson.h> // ArduinoJson library 5.11.0 by Benoit Blanchon https://github.com/bblanchon/ArduinoJson
-#include <ESP8266FtpServer.h> // https://github.com/exploitagency/esp8266FTPServer/tree/feature/bbx10_speedup
 #include <DNSServer.h>
 #include <ESP8266mDNS.h>
 
@@ -53,7 +52,6 @@ int jumperState = 0; //For restoring default settings
 ESP8266WebServer server(80);
 ESP8266WebServer httpServer(1337);
 ESP8266HTTPUpdateServer httpUpdater;
-FtpServer ftpSrv;
 const byte DNS_PORT = 53;
 DNSServer dnsServer;
 
@@ -70,9 +68,6 @@ char gatewaystr[16];
 char subnetstr[16];
 char update_username[32];
 char update_password[64];
-char ftp_username[32];
-char ftp_password[64];
-int ftpenabled;
 int ledenabled;
 char logname[31];
 unsigned int bufferlength;
@@ -618,16 +613,6 @@ void settingsPage()
     accesspointmodeyes="";
     accesspointmodeno=" checked=\"checked\"";
   }
-  String ftpenabledyes;
-  String ftpenabledno;
-  if (ftpenabled==1){
-    ftpenabledyes=" checked=\"checked\"";
-    ftpenabledno="";
-  }
-  else {
-    ftpenabledyes="";
-    ftpenabledno=" checked=\"checked\"";
-  }
   String ledenabledyes;
   String ledenabledno;
   if (ledenabled==1){
@@ -695,13 +680,6 @@ void settingsPage()
   "<b>Web Interface Administration Settings:</b><br><br>"
   "Username: <input type=\"text\" name=\"update_username\" value=\"")+update_username+F("\" maxlength=\"31\" size=\"31\"><br>"
   "Password: <input type=\"password\" name=\"update_password\" value=\"")+update_password+F("\" maxlength=\"64\" size=\"31\"><br><br>"
-  "<hr>"
-  "<b>FTP Server Settings</b><br>"
-  "<small>Changes require a reboot.</small><br>"
-  "Enabled <INPUT type=\"radio\" name=\"ftpenabled\" value=\"1\"")+ftpenabledyes+F("><br>"
-  "Disabled <INPUT type=\"radio\" name=\"ftpenabled\" value=\"0\"")+ftpenabledno+F("><br>"
-  "FTP Username: <input type=\"text\" name=\"ftp_username\" value=\"")+ftp_username+F("\" maxlength=\"31\" size=\"31\"><br>"
-  "FTP Password: <input type=\"password\" name=\"ftp_password\" value=\"")+ftp_password+F("\" maxlength=\"64\" size=\"31\"><br><br>"
   "<hr>"
   "<b>Power LED:</b><br>"
   "<small>Changes require a reboot.</small><br>"
@@ -772,9 +750,6 @@ void handleSubmitSettings()
   server.arg("subnetstr").toCharArray(subnetstr, 16);
   server.arg("update_username").toCharArray(update_username, 32);
   server.arg("update_password").toCharArray(update_password, 64);
-  server.arg("ftp_username").toCharArray(ftp_username, 32);
-  server.arg("ftp_password").toCharArray(ftp_password, 64);
-  ftpenabled = server.arg("ftpenabled").toInt();
   ledenabled = server.arg("ledenabled").toInt();
   server.arg("logname").toCharArray(logname, 31);
   bufferlength = server.arg("bufferlength").toInt();
@@ -811,9 +786,6 @@ bool loadDefaults() {
   json["subnet"] = "255.255.255.0";
   json["update_username"] = "admin";
   json["update_password"] = "rfidtool";
-  json["ftp_username"] = "ftp-admin";
-  json["ftp_password"] = "rfidtool";
-  json["ftpenabled"] = "0";
   json["ledenabled"] = "1";
   json["logname"] = "log.txt";
   json["bufferlength"] = "256";
@@ -867,9 +839,6 @@ bool loadConfig() {
   strncpy(update_username, (const char*)json["update_username"], 32);
   strncpy(update_password, (const char*)json["update_password"], 64);
 
-  strncpy(ftp_username, (const char*)json["ftp_username"], 32);
-  strncpy(ftp_password, (const char*)json["ftp_password"], 64);
-  ftpenabled = json["ftpenabled"];
   ledenabled = json["ledenabled"];
   strncpy(logname, (const char*)json["logname"], 31);
   bufferlength = json["bufferlength"];
@@ -950,9 +919,6 @@ bool saveConfig() {
   json["subnet"] = subnetstr;
   json["update_username"] = update_username;
   json["update_password"] = update_password;
-  json["ftp_username"] = ftp_username;
-  json["ftp_password"] = ftp_password;
-  json["ftpenabled"] = ftpenabled;
   json["ledenabled"] = ledenabled;
   json["logname"] = logname;
   json["bufferlength"] = bufferlength;
@@ -1912,10 +1878,6 @@ void setup() {
   httpServer.begin();
 
   MDNS.addService("http", "tcp", 1337);
-  
-  if (ftpenabled==1){
-    ftpSrv.begin(String(ftp_username),String(ftp_password));
-  }
 
 //Start RFID Reader
   pinMode(LED_BUILTIN, OUTPUT);  // LED
@@ -1935,9 +1897,6 @@ void setup() {
 // LOOP function
 void loop()
 {
-  if (ftpenabled==1){
-    ftpSrv.handleFTP();
-  }
   server.handleClient();
   httpServer.handleClient();
   while (Serial.available()) {

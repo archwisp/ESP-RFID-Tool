@@ -33,10 +33,6 @@ Default credentials to access the configuration page:<br>
 Username: "admin"<br>
 Password: "rfidtool"<br>
 <br>
-Default credentials for ftp server:<br>
-Username: "ftp-admin"<br>
-Password: "rfidtool"<br>
-<br>
 WiFi Configuration:<br>
 <br>
 Network Type:<br>
@@ -57,14 +53,6 @@ Web Interface Administration Settings:<br>
 <br>
 Username: Username to configure/upgrade ESP-RFID-Tool<br>
 Password: Password to configure/upgrade ESP-RFID-Tool<br>
-<br>
-FTP Server Settings:<br>
-<br>
-Note: Supports Passive(PASV) Mode Only!<br>
-Enabled: Turn FTP Server ON<br>
-Disabled: Turn FTP Server OFF<br>
-Username: Username to login to ftp server<br>
-Password: Password to login to ftp server<br>
 <br>
 Power LED:<br>
 <br>
