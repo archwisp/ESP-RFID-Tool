@@ -101,10 +101,20 @@ OPTION 2: Arduino IDE:
 * Choose the board NodeMCU 1.0.  
 * Upload.
 
-OPTION 3: esptool
+OPTION 3: esptool:
 * Download one of the latest releases from  
   * https://github.com/rfidtool/ESP-RFID-Tool/releases  
 * esptool.py --chip esp8266 --port /dev/cu.usbserial-0001 write_flash 0x00 esprfidtool.bin
+
+OPTION 4: platformio:
+* Clone the repository:
+    * https://github.com/rfidtool/ESP-RFID-Tool
+* Install platformio:
+    * pip install platformio
+* Build the project:
+    * platformio run
+* Flash the board:
+    * platformio run -t upload
   
 ## Software Help    
   
