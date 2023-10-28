@@ -99,7 +99,12 @@ OPTION 2: Arduino IDE:
   * ESP8266FtpServer.h  
     * https://github.com/exploitagency/esp8266FTPServer/tree/feature/bbx10_speedup  
 * Choose the board NodeMCU 1.0.  
-* Upload.  
+* Upload.
+
+OPTION 3: esptool
+* Download one of the latest releases from  
+  * https://github.com/rfidtool/ESP-RFID-Tool/releases  
+* esptool.py --chip esp8266 --port /dev/cu.usbserial-0001 write_flash 0x00 esprfidtool.bin
   
 ## Software Help    
   
