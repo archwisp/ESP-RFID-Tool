@@ -825,7 +825,7 @@ bool loadDefaults() {
   json.printTo(configFile);
   configFile.close();
   jsonBuffer.clear();
-  loadConfig();
+  return loadConfig();
 }
 
 bool loadConfig() {
