@@ -855,23 +855,23 @@ bool loadConfig() {
     ESP.restart();
   }
 
-  strcpy(ssid, (const char*)json["ssid"]);
-  strcpy(password, (const char*)json["password"]);
+  strncpy(ssid, (const char*)json["ssid"], 32);
+  strncpy(password, (const char*)json["password"], 64);
   channel = json["channel"];
   hidden = json["hidden"];
   accesspointmode = json["accesspointmode"];
-  strcpy(local_IPstr, (const char*)json["local_IP"]);
-  strcpy(gatewaystr, (const char*)json["gateway"]);
-  strcpy(subnetstr, (const char*)json["subnet"]);
+  strncpy(local_IPstr, (const char*)json["local_IP"], 16);
+  strncpy(gatewaystr, (const char*)json["gateway"], 16);
+  strncpy(subnetstr, (const char*)json["subnet"], 16);
 
-  strcpy(update_username, (const char*)json["update_username"]);
-  strcpy(update_password, (const char*)json["update_password"]);
+  strncpy(update_username, (const char*)json["update_username"], 32);
+  strncpy(update_password, (const char*)json["update_password"], 64);
 
-  strcpy(ftp_username, (const char*)json["ftp_username"]);
-  strcpy(ftp_password, (const char*)json["ftp_password"]);
+  strncpy(ftp_username, (const char*)json["ftp_username"], 32);
+  strncpy(ftp_password, (const char*)json["ftp_password"], 64);
   ftpenabled = json["ftpenabled"];
   ledenabled = json["ledenabled"];
-  strcpy(logname, (const char*)json["logname"]);
+  strncpy(logname, (const char*)json["logname"], 31);
   bufferlength = json["bufferlength"];
   rxpacketgap = json["rxpacketgap"];
   txdelayus = json["txdelayus"];
